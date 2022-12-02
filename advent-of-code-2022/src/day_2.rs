@@ -39,8 +39,7 @@ fn parse_input(lines: Vec<String>) -> Vec<Round> {
     return result;
 }
 
-fn solve_first(input: Vec<String>) -> String {
-    let rounds = parse_input(input);
+fn solve_first(rounds: &Vec<Round>) -> String {
     let mut score: i32 = 0;
     for round in rounds {
         let round_score: i32 = match round {
@@ -65,8 +64,7 @@ fn solve_first(input: Vec<String>) -> String {
     return score.to_string();
 }
 
-fn solve_second(input: Vec<String>) -> String {
-    let rounds = parse_input(input);
+fn solve_second(rounds: &Vec<Round>) -> String {
     let mut score: i32 = 0;
     for round in rounds {
         let desired_move = match &round {
@@ -111,10 +109,7 @@ fn solve_second(input: Vec<String>) -> String {
     return score.to_string();
 }
 
-pub fn solve(part: String, input: Vec<String>) -> String {
-    return match part.as_str() {
-        "A" => solve_first(input),
-        "B" => solve_second(input),
-        _ => panic! {"not my part"},
-    };
+pub fn solve(input: Vec<String>) -> (String, String) {
+    let data = parse_input(input);
+    return (solve_first(&data), solve_second(&data));
 }

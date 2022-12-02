@@ -18,7 +18,7 @@ fn parse_input(data: Vec<String>) -> Vec<Vec<i32>> {
     return result;
 }
 
-fn to_sums(elves: Vec<Vec<i32>>) -> Vec<i32> {
+fn to_sums(elves: &Vec<Vec<i32>>) -> Vec<i32> {
     let mut elf_sums = Vec::new();
 
     for elf in elves {
@@ -32,9 +32,7 @@ fn to_sums(elves: Vec<Vec<i32>>) -> Vec<i32> {
     return elf_sums;
 }
 
-pub fn solve_first(input: Vec<String>) -> String {
-    let elves = parse_input(input);
-
+pub fn solve_first(elves: &Vec<Vec<i32>>) -> String {
     let elf_sums = to_sums(elves);
 
     let max = elf_sums.into_iter().max();
@@ -47,9 +45,7 @@ pub fn solve_first(input: Vec<String>) -> String {
     return result.to_string();
 }
 
-pub fn solve_second(input: Vec<String>) -> String {
-    let elves = parse_input(input);
-
+pub fn solve_second(elves: &Vec<Vec<i32>>) -> String {
     let mut elf_sums = to_sums(elves);
 
     elf_sums.sort();
@@ -59,10 +55,7 @@ pub fn solve_second(input: Vec<String>) -> String {
     return top_three_sum.to_string();
 }
 
-pub fn solve(part: String, input: Vec<String>) -> String {
-    return match part.as_str() {
-        "A" => solve_first(input),
-        "B" => solve_second(input),
-        _ => panic! {"not my part"},
-    };
+pub fn solve(input: Vec<String>) -> (String, String) {
+    let data = parse_input(input);
+    return (solve_first(&data), solve_second(&data));
 }
