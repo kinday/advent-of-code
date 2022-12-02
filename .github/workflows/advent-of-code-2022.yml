@@ -1,0 +1,34 @@
+name: "Advent of Code 2022"
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  solve:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Cache Rust dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - uses: actions/checkout@v3
+      - name: Build
+        working-directory: advent-of-code-2022
+        run: cargo build --release
+      - name: Cache task inputs
+        uses: actions/cache@v3
+        with:
+          path: ./advent-of-code-2022/.cache
+          key: advent-of-code-2022-v1
+      - name: Get solutions
+        working-directory: advent-of-code-2022
+        env:
+          AOC_TOKEN: ${{ secrets.AOC_TOKEN }}
+        run: cargo run --release
