@@ -1,6 +1,7 @@
 use std::io;
 
 mod day_1;
+mod day_2;
 
 struct Cli {
     day: i8,
@@ -10,6 +11,7 @@ struct Cli {
 fn solve(day: i8, part: String, input: Vec<String>) -> String {
     return match day {
         1 => day_1::solve(part, input),
+        2 => day_2::solve(part, input),
         _ => panic! {"bad day"},
     };
 }
