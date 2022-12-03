@@ -4,6 +4,7 @@ use std::io::{self, prelude::*};
 
 mod day_1;
 mod day_2;
+mod day_3;
 
 const CACHEDIR: &'static str = ".cache";
 
@@ -79,12 +80,13 @@ fn solve(day: i8) -> (String, String) {
     return match day {
         1 => day_1::solve(raw_data),
         2 => day_2::solve(raw_data),
+        3 => day_3::solve(raw_data),
         _ => panic! {"bad day"},
     };
 }
 
 fn main() {
-    for day in 1..=2 {
+    for day in 1..=3 {
         let (answer_1, answer_2) = solve(day);
         println!("Day {}: {} / {}", day, answer_1, answer_2)
     }
