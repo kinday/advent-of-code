@@ -5,6 +5,11 @@ struct Rucksack(Compartment, Compartment);
 
 type Group = Vec<Compartment>;
 
+const ASCII_LOWERCASE_A: u32 = 97;
+const ASCII_LOWERCASE_Z: u32 = 122;
+const ASCII_UPPERCASE_A: u32 = 65;
+const ASCII_UPPERCASE_Z: u32 = 90;
+
 trait Intersectable {
     fn intersection(&self) -> char;
 }
@@ -36,15 +41,11 @@ fn find_common_item(rucksack: &Rucksack) -> char {
 fn to_priority(item: char) -> u32 {
     let code = item as u32;
 
-    if item.is_ascii_lowercase() {
-        return code - 97 + 1;
-    }
-
-    if item.is_ascii_uppercase() {
-        return code - 65 + 27;
-    }
-
-    return 0;
+    return match code {
+        (ASCII_LOWERCASE_A..=ASCII_LOWERCASE_Z) => code - ASCII_LOWERCASE_A + 1,
+        (ASCII_UPPERCASE_A..=ASCII_UPPERCASE_Z) => code - ASCII_UPPERCASE_A + 27,
+        _ => 0,
+    };
 }
 
 fn solve_first(rucksacks: &Vec<Rucksack>) -> String {
