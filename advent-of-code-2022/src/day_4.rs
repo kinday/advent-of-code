@@ -62,18 +62,14 @@ fn parse_input(data: Vec<String>) -> Vec<Pair> {
 fn solve_first(input: &Vec<Pair>) -> String {
     let result = input
         .iter()
-        .map(|p| p.is_concealing())
-        .filter(|b| b.to_owned())
-        .count();
+        .fold(0, |c, p| if p.is_concealing() { c + 1 } else { c });
     return result.to_string();
 }
 
 fn solve_second(input: &Vec<Pair>) -> String {
     let result = input
         .iter()
-        .map(|p| p.is_intersecting())
-        .filter(|b| b.to_owned())
-        .count();
+        .fold(0, |c, p| if p.is_intersecting() { c + 1 } else { c });
     return result.to_string();
 }
 
