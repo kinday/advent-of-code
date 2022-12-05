@@ -6,6 +6,7 @@ mod day_1;
 mod day_2;
 mod day_3;
 mod day_4;
+mod day_5;
 
 const CACHEDIR: &'static str = ".cache";
 
@@ -83,12 +84,13 @@ fn solve(day: i8) -> (String, String) {
         2 => day_2::solve(raw_data),
         3 => day_3::solve(raw_data),
         4 => day_4::solve(raw_data),
+        5 => day_5::solve(raw_data.join("\n")),
         _ => panic! {"bad day"},
     };
 }
 
 fn main() {
-    for day in 1..=4 {
+    for day in 1..=5 {
         let (answer_1, answer_2) = solve(day);
         println!("Day {}: {} / {}", day, answer_1, answer_2)
     }
