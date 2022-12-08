@@ -19,6 +19,9 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions/checkout@v3
+      - name: Test
+        working-directory: advent-of-code-2022
+        run: cargo test
       - name: Build
         working-directory: advent-of-code-2022
         run: cargo build --release
