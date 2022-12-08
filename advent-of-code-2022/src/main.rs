@@ -1,6 +1,7 @@
 use std::env;
 use std::fs;
 use std::io::{self, prelude::*};
+use std::time::Instant;
 
 mod day_1;
 mod day_2;
@@ -96,8 +97,15 @@ fn solve(day: i8) -> (String, String) {
 }
 
 fn main() {
+    let main_start = Instant::now();
     for day in 1..=8 {
+        let day_start = Instant::now();
         let (answer_1, answer_2) = solve(day);
-        println!("Day {}: {} / {}", day, answer_1, answer_2)
+        let elapsed = day_start.elapsed();
+        println!("Day {}, done in {:?}", day, elapsed);
+        println!("\tPart 1: {}", answer_1);
+        println!("\tPart 2: {}", answer_2);
+        println!("")
     }
+    println!("All done in {:?}", main_start.elapsed());
 }
