@@ -11,6 +11,7 @@ mod day_5;
 mod day_6;
 mod day_7;
 mod day_8;
+mod day_9;
 
 const CACHEDIR: &'static str = ".cache";
 
@@ -92,13 +93,14 @@ fn solve(day: i8) -> (String, String) {
         6 => day_6::solve(raw_data.join("\n")),
         7 => day_7::solve(raw_data.join("\n")),
         8 => day_8::solve(raw_data.join("\n")),
+        9 => day_9::solve(raw_data.join("\n")),
         _ => panic! {"bad day"},
     };
 }
 
 fn main() {
     let main_start = Instant::now();
-    for day in 1..=8 {
+    for day in 1..=9 {
         let day_start = Instant::now();
         let (answer_1, answer_2) = solve(day);
         let elapsed = day_start.elapsed();
