@@ -165,17 +165,22 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 mod tests {
     use super::*;
 
+    fn read_fixture_from_file(day: i32) -> String {
+        let file_path = std::path::PathBuf::from(format!("{}/day_{}", "fixtures", day));
+        read_input_from_file(file_path).unwrap().join("\n")
+    }
+
     #[test]
     fn test_solve_day_1_part_1_ok() {
-        let input = "1000\n2000\n3000\n\n4000\n\n5000\n6000\n\n7000\n8000\n9000\n\n10000";
-        let result = day_1::solve_first(&input.to_string()).unwrap();
+        let input = read_fixture_from_file(1);
+        let result = day_1::solve_first(&input).unwrap();
         assert_eq!(result, String::from("24000"));
     }
 
     #[test]
     fn test_solve_day_1_part_1_err() {
-        let input = "BOOM";
-        let result = day_1::solve_first(&input.to_string());
+        let input = String::from("BOOM");
+        let result = day_1::solve_first(&input);
         assert_eq!(
             result,
             Err(day_1::SolutionError::TroupeParseError(
@@ -186,15 +191,15 @@ mod tests {
 
     #[test]
     fn test_solve_day_1_part_2_ok() {
-        let input = "1000\n2000\n3000\n\n4000\n\n5000\n6000\n\n7000\n8000\n9000\n\n10000";
-        let result = day_1::solve_second(&input.to_string()).unwrap();
+        let input = read_fixture_from_file(1);
+        let result = day_1::solve_second(&input).unwrap();
         assert_eq!(result, String::from("45000"));
     }
 
     #[test]
     fn test_solve_day_1_part_2_err() {
-        let input = "BOOM";
-        let result = day_1::solve_second(&input.to_string());
+        let input = String::from("BOOM");
+        let result = day_1::solve_second(&input);
         assert_eq!(
             result,
             Err(day_1::SolutionError::TroupeParseError(
