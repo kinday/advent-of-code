@@ -14,6 +14,9 @@ mod day_7;
 mod day_8;
 mod day_9;
 
+#[derive(Debug)]
+struct SolutionError<T>(T);
+
 const CACHEDIR: &'static str = ".cache";
 
 fn read_input_from_file(file_path: std::path::PathBuf) -> io::Result<Vec<String>> {
@@ -78,7 +81,7 @@ fn read_input_from_remote(day: String) -> Result<Vec<String>, ureq::Error> {
     Ok(result)
 }
 
-fn solve(day: i8) -> (String, String) {
+fn solve(day: i8) -> Result<(String, String), Box<dyn std::error::Error>> {
     let input: io::Result<Vec<String>> = match read_input_from_remote(day.to_string()).ok() {
         Some(input) => Ok(input),
         None => panic!("could not fetch"),
@@ -86,15 +89,15 @@ fn solve(day: i8) -> (String, String) {
 
     let raw_data = input.unwrap();
     return match day {
-        1 => day_1::solve(raw_data),
-        2 => day_2::solve(raw_data),
-        3 => day_3::solve(raw_data),
-        4 => day_4::solve(raw_data),
-        5 => day_5::solve(raw_data.join("\n")),
-        6 => day_6::solve(raw_data.join("\n")),
-        7 => day_7::solve(raw_data.join("\n")),
-        8 => day_8::solve(raw_data.join("\n")),
-        9 => day_9::solve(raw_data.join("\n")),
+        1 => Ok(day_1::solve(raw_data)),
+        2 => Ok(day_2::solve(raw_data)),
+        3 => Ok(day_3::solve(raw_data)),
+        4 => Ok(day_4::solve(raw_data)),
+        5 => Ok(day_5::solve(raw_data.join("\n"))),
+        6 => Ok(day_6::solve(raw_data.join("\n"))),
+        7 => Ok(day_7::solve(raw_data.join("\n"))),
+        8 => Ok(day_8::solve(raw_data.join("\n"))),
+        9 => Ok(day_9::solve(raw_data.join("\n"))),
         10 => {
             let (answer_1, answer_2) = day_10::solve(raw_data.join("\n"));
 
@@ -107,22 +110,30 @@ fn solve(day: i8) -> (String, String) {
             // Remove tabulation on first line
             let answer_2 = answer_2.trim_start().to_string();
 
-            (answer_1, answer_2)
+            Ok((answer_1, answer_2))
         }
         _ => panic! {"bad day"},
     };
 }
 
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let main_start = Instant::now();
     for day in 1..=10 {
         let day_start = Instant::now();
-        let (answer_1, answer_2) = solve(day);
+        let result = solve(day);
         let elapsed = day_start.elapsed();
         println!("Day {}, done in {:?}", day, elapsed);
-        println!("\tPart 1: {}", answer_1);
-        println!("\tPart 2: {}", answer_2);
-        println!("")
+        match result {
+            Ok((answer_1, answer_2)) => {
+                println!("\tPart 1: {}", answer_1);
+                println!("\tPart 2: {}", answer_2);
+            }
+            Err(error) => {
+                eprintln!("\tError: {}", error);
+            }
+        };
+        println!("");
     }
     println!("All done in {:?}", main_start.elapsed());
+    Ok(())
 }
