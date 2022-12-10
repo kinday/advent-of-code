@@ -17,6 +17,24 @@ mod day_9;
 #[derive(Debug)]
 struct SolutionError<T>(T);
 
+impl std::error::Error for SolutionError<day_1::SolutionError> {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        Some(&self.0)
+    }
+}
+
+impl std::fmt::Display for SolutionError<day_1::SolutionError> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Failed to solve day 1, part 1")
+    }
+}
+
+impl From<day_1::SolutionError> for SolutionError<day_1::SolutionError> {
+    fn from(error: day_1::SolutionError) -> Self {
+        SolutionError(error)
+    }
+}
+
 const CACHEDIR: &'static str = ".cache";
 
 fn read_input_from_file(file_path: std::path::PathBuf) -> io::Result<Vec<String>> {
@@ -89,7 +107,12 @@ fn solve(day: i8) -> Result<(String, String), Box<dyn std::error::Error>> {
 
     let raw_data = input.unwrap();
     return match day {
-        1 => Ok(day_1::solve(raw_data)),
+        1 => {
+            let input = raw_data.join("\n");
+            let part_1 = day_1::solve_first(&input)?;
+            let part_2 = day_1::solve_second(&input)?;
+            Ok((part_1, part_2))
+        }
         2 => Ok(day_2::solve(raw_data)),
         3 => Ok(day_3::solve(raw_data)),
         4 => Ok(day_4::solve(raw_data)),
@@ -136,4 +159,47 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     println!("All done in {:?}", main_start.elapsed());
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_solve_day_1_part_1_ok() {
+        let input = "1000\n2000\n3000\n\n4000\n\n5000\n6000\n\n7000\n8000\n9000\n\n10000";
+        let result = day_1::solve_first(&input.to_string()).unwrap();
+        assert_eq!(result, String::from("24000"));
+    }
+
+    #[test]
+    fn test_solve_day_1_part_1_err() {
+        let input = "BOOM";
+        let result = day_1::solve_first(&input.to_string());
+        assert_eq!(
+            result,
+            Err(day_1::SolutionError::TroupeParseError(
+                day_1::TroupeParseError
+            ))
+        );
+    }
+
+    #[test]
+    fn test_solve_day_1_part_2_ok() {
+        let input = "1000\n2000\n3000\n\n4000\n\n5000\n6000\n\n7000\n8000\n9000\n\n10000";
+        let result = day_1::solve_second(&input.to_string()).unwrap();
+        assert_eq!(result, String::from("45000"));
+    }
+
+    #[test]
+    fn test_solve_day_1_part_2_err() {
+        let input = "BOOM";
+        let result = day_1::solve_second(&input.to_string());
+        assert_eq!(
+            result,
+            Err(day_1::SolutionError::TroupeParseError(
+                day_1::TroupeParseError
+            ))
+        );
+    }
 }
