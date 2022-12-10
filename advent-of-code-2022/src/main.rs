@@ -4,6 +4,7 @@ use std::io::{self, prelude::*};
 use std::time::Instant;
 
 mod day_1;
+mod day_10;
 mod day_2;
 mod day_3;
 mod day_4;
@@ -94,13 +95,27 @@ fn solve(day: i8) -> (String, String) {
         7 => day_7::solve(raw_data.join("\n")),
         8 => day_8::solve(raw_data.join("\n")),
         9 => day_9::solve(raw_data.join("\n")),
+        10 => {
+            let (answer_1, answer_2) = day_10::solve(raw_data.join("\n"));
+
+            // Add some tabulation for better output
+            let answer_2: String = answer_2
+                .lines()
+                .map(|line| ["\t\t", line, "\n"].concat())
+                .collect();
+
+            // Remove tabulation on first line
+            let answer_2 = answer_2.trim_start().to_string();
+
+            (answer_1, answer_2)
+        }
         _ => panic! {"bad day"},
     };
 }
 
 fn main() {
     let main_start = Instant::now();
-    for day in 1..=9 {
+    for day in 1..=10 {
         let day_start = Instant::now();
         let (answer_1, answer_2) = solve(day);
         let elapsed = day_start.elapsed();
