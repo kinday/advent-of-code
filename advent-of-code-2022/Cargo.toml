@@ -6,4 +6,6 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+crypto-bigint = "0.4.9"
+num = "0.4.0"
 ureq = "2.5.0"
