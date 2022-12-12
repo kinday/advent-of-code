@@ -6,6 +6,7 @@ use std::time::Instant;
 mod day_1;
 mod day_10;
 mod day_11;
+mod day_12;
 mod day_2;
 mod day_3;
 mod day_4;
@@ -142,13 +143,19 @@ fn solve(day: i8) -> Result<(String, String), Box<dyn std::error::Error>> {
             let part_2 = day_11::solve_second(&input)?;
             Ok((part_1, part_2))
         }
+        12 => {
+            let input = raw_data.join("\n");
+            let part_1 = day_12::solve_first(&input)?;
+            let part_2 = day_12::solve_second(&input)?;
+            Ok((part_1, part_2))
+        }
         _ => panic! {"bad day"},
     };
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let main_start = Instant::now();
-    for day in 1..=11 {
+    for day in 1..=12 {
         let day_start = Instant::now();
         let result = solve(day);
         let elapsed = day_start.elapsed();
@@ -227,5 +234,12 @@ mod tests {
         let input = read_fixture_from_file(11);
         let result = day_11::solve_second(&input).unwrap();
         assert_eq!(result, String::from("2713310158"));
+    }
+
+    #[test]
+    fn test_solve_day_12_part_1_ok() {
+        let input = read_fixture_from_file(12);
+        let result = day_12::solve_first(&input).unwrap();
+        assert_eq!(result, String::from("31"));
     }
 }
