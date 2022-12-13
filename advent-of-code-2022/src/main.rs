@@ -242,4 +242,11 @@ mod tests {
         let result = day_12::solve_first(&input).unwrap();
         assert_eq!(result, String::from("31"));
     }
+
+    #[test]
+    fn test_solve_day_12_part_2_ok() {
+        let input = read_fixture_from_file(12);
+        let result = day_12::solve_second(&input).unwrap();
+        assert_eq!(result, String::from("29"));
+    }
 }

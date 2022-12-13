@@ -11,7 +11,7 @@ enum Marker {
     End,
 }
 
-#[derive(Clone, Debug, Eq, Hash, PartialEq)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 struct Position {
     elevation: Elevation,
     x: usize,
@@ -91,10 +91,15 @@ impl ElevationMap {
         self._positions.get(index)
     }
 
-    fn find_shortest_path(&self) -> Vec<&Position> {
-        let from = &self._from;
-        let to = &self._to;
+    fn get_start(&self) -> usize {
+        self._from
+    }
 
+    fn get_end(&self) -> usize {
+        self._to
+    }
+
+    fn find_shortest_path(&self, from: &usize, to: &usize) -> Option<Vec<&Position>> {
         let mut distance = HashMap::from([(from, 0)]);
         let mut predecessors: HashMap<&usize, &usize> = HashMap::new();
         let mut visited = HashSet::from([from]);
@@ -130,10 +135,16 @@ impl ElevationMap {
 
         path.reverse();
 
-        path.iter()
-            .map(|index| self.get_position(index.clone()))
-            .flatten()
-            .collect()
+        if path.len() == 0 {
+            None
+        } else {
+            Some(
+                path.iter()
+                    .map(|index| self.get_position(index.clone()))
+                    .flatten()
+                    .collect(),
+            )
+        }
     }
 
     fn positions(&self) -> std::slice::Iter<Position> {
@@ -218,10 +229,28 @@ impl std::error::Error for SolutionError {}
 
 pub fn solve_first(input: &String) -> Result<String, SolutionError> {
     let elevation_map = input.parse::<ElevationMap>()?;
-    let result = elevation_map.find_shortest_path();
+    let start = elevation_map.get_start();
+    let end = elevation_map.get_end();
+    let result = elevation_map
+        .find_shortest_path(&start, &end)
+        .ok_or(SolutionError::Unknown)?;
     Ok(result.len().to_string())
 }
 
-pub fn solve_second(_input: &String) -> Result<String, SolutionError> {
-    unimplemented!()
+pub fn solve_second(input: &String) -> Result<String, SolutionError> {
+    let elevation_map = input.parse::<ElevationMap>()?;
+    let result = elevation_map
+        .positions()
+        .enumerate()
+        .filter(|index_position| index_position.1.elevation == 'a' as i32)
+        .map(|start| {
+            let end = elevation_map.get_end();
+            elevation_map.find_shortest_path(&start.0, &end)
+        })
+        .flatten()
+        .map(|route| route.len())
+        .min()
+        .ok_or(SolutionError::Unknown)?;
+
+    Ok(result.to_string())
 }
